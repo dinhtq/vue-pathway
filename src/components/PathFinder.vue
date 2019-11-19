@@ -17,7 +17,9 @@
             :is-start="isStart"
             :is-finish="isFinish"
             :is-wall="isWall"
-            :mouse-is-pressed="mouseIsPressed"
+            :on-mouse-down="handleOnMouseDown"
+            :on-mouse-enter="handleOnMouseEnter"
+            :on-mouse-up="handleOnMouseUp"
           />
         </template>
       </div>
@@ -79,6 +81,35 @@ export default {
         isWall: false,
         mouseIsPressed: false
       }
+    },
+    getNewGridWithWallToggled(grid, row, col) {
+
+      const newGrid = grid.slice()
+      // get clicked on node
+      const node = newGrid[row][col]
+      const newNode = {
+        ...node,
+        isWall: !node.isWall
+      }
+      
+      // update clicked on node
+      newGrid[row][col] = newNode
+
+      return newGrid
+    },
+    handleOnMouseDown(row, col) {
+      // get new grid will walls
+      this.grid = this.getNewGridWithWallToggled(this.grid, row, col)
+      this.mouseIsPressed = true
+    },
+    handleOnMouseEnter(row, col) {
+      if (!this.mouseIsPressed) {
+        return
+      }
+      this.grid = this.getNewGridWithWallToggled(this.grid, row, col)
+    },
+    handleOnMouseUp() {
+      this.mouseIsPressed = false
     }
   }
 }

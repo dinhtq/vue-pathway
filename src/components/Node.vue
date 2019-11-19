@@ -1,5 +1,11 @@
 <template>
-  <div class="node" :class="extraClasses"></div>
+  <div
+    class="node"
+    :class="extraClasses"
+    @mousedown="onMouseDown(row, col)"
+    @mouseenter="onMouseEnter(row, col)"
+    @mouseup="onMouseUp"
+  ></div>
 </template>
 
 <script>
@@ -27,10 +33,18 @@ export default {
       type: Boolean,
       required: true
     },
-    mouseIsPressed: {
-      type: Boolean,
+    onMouseDown: {
+      type: Function,
       required: true
-    }
+    },
+    onMouseEnter: {
+      type: Function,
+      required: true
+    },
+    onMouseUp: {
+      type: Function,
+      required: true
+    },
   },
 
   computed: {
