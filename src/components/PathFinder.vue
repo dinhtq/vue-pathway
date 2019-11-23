@@ -1,5 +1,6 @@
 <template>
   <div class="pathfinder-wrapper">
+    <button @click="visualizeDjikstra">Djikstra</button>
     <template v-for="(row, rowIndex) in grid">
       <div :key="rowIndex">
         <template v-for="({
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import { djikstra, getNodesInShortestPathOrder } from '../utils'
 import Node from './Node'
 
 const START_NODE_ROW = 10
@@ -40,10 +42,6 @@ export default {
 
   components: {
     Node
-  },
-
-  props: {
-    msg: String
   },
 
   data: () => ({
@@ -110,6 +108,34 @@ export default {
     },
     handleOnMouseUp() {
       this.mouseIsPressed = false
+    },
+    animateShortestPath(nodesInShortestPathOrder) {
+      for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+        setTimeout(() => {
+          const node = nodesInShortestPathOrder[i]
+          document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-shortest-path'
+        }, 50 * i)
+      }
+    },
+    animateDjikstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+      for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+        if (i === visitedNodesInOrder.length) {
+          setTimeout(() => {
+            this.animateShortestPath(nodesInShortestPathOrder)
+          }, 10 * i)
+        }
+        setTimeout(() => {
+          const node = visitedNodesInOrder[i]
+          document.getElementById(`node-${node.row}-${node.col}`).className = 'node node-visited'
+        }, 10 * i)
+      }
+    },
+    visualizeDjikstra() {
+      const startNode = this.grid[START_NODE_ROW][START_NODE_COL]
+      const finishNode = this.grid[FINISH_NODE_ROW][FINISH_NODE_COL]
+      const visitedNodesInOrder = djikstra(this.grid, startNode, finishNode)
+      const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode)
+      this.animateDjikstra(visitedNodesInOrder, nodesInShortestPathOrder)
     }
   }
 }
