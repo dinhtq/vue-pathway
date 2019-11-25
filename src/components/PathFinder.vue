@@ -32,6 +32,8 @@
 import { djikstra, getNodesInShortestPathOrder } from '../utils'
 import Node from './Node'
 
+const TOTAL_ROWS = 25
+const TOTAL_COLS = 50
 const START_NODE_ROW = 10
 const START_NODE_COL = 15
 const FINISH_NODE_ROW = 10
@@ -55,12 +57,10 @@ export default {
 
   methods: {
     getGrid() {
-      const totalRows = 25
-      const totalCols = 50
       const grid = []
-      for (let row = 0; row < totalRows; row++) {
+      for (let row = 0; row < TOTAL_ROWS; row++) {
         const currentRow = []
-        for (let col = 0; col < totalCols; col++) {
+        for (let col = 0; col < TOTAL_COLS; col++) {
           currentRow.push(this.getNode(row, col))
         }
         grid.push(currentRow)
@@ -71,13 +71,12 @@ export default {
       return {
         row,
         col,
-        prevNode: null,
+        previousNode: null,
         distance: Infinity,
         isStart: row === START_NODE_ROW && col === START_NODE_COL,
         isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
         isVisited: false,
-        isWall: false,
-        mouseIsPressed: false
+        isWall: false
       }
     },
     getNewGridWithWallToggled(grid, row, col) {
@@ -123,6 +122,7 @@ export default {
           setTimeout(() => {
             this.animateShortestPath(nodesInShortestPathOrder)
           }, 10 * i)
+          return
         }
         setTimeout(() => {
           const node = visitedNodesInOrder[i]

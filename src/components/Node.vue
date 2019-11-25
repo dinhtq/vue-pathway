@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="`node-${row}-${col}`"
     class="node"
     :class="extraClasses"
     @mousedown="onMouseDown(row, col)"
@@ -81,6 +82,13 @@ export default {
 
 .node-visited {
   animation-name: visitedAnimation;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 
 @keyframes visitedAnimation {
